@@ -1,0 +1,29 @@
+body {
+  background-color: bisque;
+}
+form {
+  padding: 10px;
+  border: 2px solid black;
+  background: linear-gradient(90deg, #f598a8, #f6edb2);
+}
+.search-area {
+  padding: 10px;
+  border: 2px solid black;
+  background: linear-gradient(90deg, #f598a8, #f6edb2);
+  margin-bottom: 5px;
+}
+.search-area__title {
+  margin-bottom: 10px;
+}
+
+tbody {
+  background-color: #ffff;
+}
+th {
+  transition: outline 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+}
+th:hover {
+  outline: 1px solid purple;
+  opacity: 0.7;
+}
