@@ -1,6 +1,38 @@
 (function () {
     // для работы с localstorage
-    let arrayLocal = [];
+  let arrayLocal = [];
+  let defaultArrayLocal = [{
+    dateOfBirth: "1939-09-11",
+    faculty: "Пропагандистский",
+    finishOfstudy: "2022",
+    id: 1,
+    name: "Иосиф Давыдович Кобзон",
+    startOfStudy: "2018",
+    },
+    {
+      dateOfBirth: "1952-10-07",
+      faculty: "Гуманитарный",
+      finishOfstudy: "2009",
+      id: 2,
+      name: "Владимир Владимирович Путин",
+      startOfStudy: "2005"
+    },
+    {
+      dateOfBirth: "2009-02-28",
+      faculty: "Менеджмента",
+      finishOfstudy: "2024",
+      id: 3,
+      name: "Иванов Иван Иванович",
+      startOfStudy: "2020"
+    },
+    {
+      dateOfBirth: "1987-03-06",
+      faculty: "Информационных технологий",
+      finishOfstudy: "2025",
+      id: 4,
+      name: "Кузьмич Михаил Петрович",
+      startOfStudy: "2021"
+    }];
 
     // создаем и возвращаем заголовок приложения
     function createAppTitle(title) {
@@ -44,7 +76,9 @@
         inputStartStudy.placeholder = 'Год начала учебы';
 
         inputName.setAttribute('reqired', true);
+        inputName.setAttribute('minlength', 6);
         inputFaculty.setAttribute('required', true);
+        inputFaculty.setAttribute('minlength', 3);
         inputDateBirth.setAttribute('required', true);
         inputStartStudy.setAttribute('required', true);
 
@@ -58,7 +92,7 @@
         inputDateBirth.setAttribute('type', 'date');
         inputStartStudy.setAttribute('type', 'number');
         inputStartStudy.setAttribute('min', '2000');
-        inputStartStudy.setAttribute('max', '2100');
+        inputStartStudy.setAttribute('max', `${new Date().getFullYear()}`);
 
         // кнопка
         buttonWrapper.classList.add('input-group-append');
@@ -265,6 +299,18 @@
             }
         }
     }
+  // функция создания дефолтного списка
+    function createDeafultItems() {
+      const storageArr = JSON.parse(localStorage.getItem(key));
+        if (localStorage.getItem(key) === null || storageArr.length === 0) {
+          arrayLocal = defaultArrayLocal;
+          localStorage.setItem('students', JSON.stringify(arrayLocal));
+      for (let object of arrayLocal) {
+        createStudentItem(object);
+      }
+          }
+
+    }
          // функция получения возраста
         function getAge(dateString) {
             let today = new Date();
@@ -284,7 +330,6 @@
             document.getElementById(studentId).remove();
             arrayLocal = JSON.parse(localStorage.getItem('students'));
             const newItems = arrayLocal.filter(object => object.id !== studentId);
-            console.log(newItems);
             localStorage.setItem('students', JSON.stringify(newItems));
         }
     }
@@ -293,14 +338,18 @@
     function calcCurrentLearningCourse(user) {
         const { startOfStudy } = user;
         const actualYear = new Date().getFullYear();
-        const actualMonth = new Date().getMonth();
-        //  const actualMonth = 8;
-        const course = actualYear - startOfStudy;
+      const actualMonth = new Date().getMonth();
+        // const actualMonth = 7;
+      const course = actualYear - startOfStudy;
 
         if (course > 4 || (course === 4 && actualMonth > 8)) {
-            return ((`${startOfStudy} - ${Number(startOfStudy) + 4} (закончил)`));
+            return ((`${startOfStudy} - ${Number(startOfStudy) + 4} (закончил)`))
+        } else if (course === 0 && actualMonth < 8) {
+          return ((`${startOfStudy} - ${Number(startOfStudy) + 4} (зачислен)`))
+        } else if (actualMonth >= 8 && Number(startOfStudy) === actualYear) {
+          return ((`${startOfStudy} - ${Number(startOfStudy) + 4} (1 курс)`))
         } else {
-            return (`${startOfStudy} - ${Number(startOfStudy) + 4} (${course} курс)`);
+            return (`${startOfStudy} - ${Number(startOfStudy) + 4} (${course} курс)`)
         }
     };
 
@@ -313,7 +362,9 @@
         container.append(studentItemForm.form);
 
         //отрисовка из ls
-        createItemsFromLS();
+      createItemsFromLS();
+      //отрисовка дефолтного массива
+      createDeafultItems();
 
         //браузер создает событие submit на форме по нажатию на enter или на  кнопку создания дела
         studentItemForm.form.addEventListener('submit', function (e) {
@@ -342,8 +393,15 @@
             // создаем констату нового студента
             const user = createObjForArr();
             // передаем ее в функцию создания новой позиции
-            createStudentItem(user);
-            localStorage.setItem(key, JSON.stringify(arrayLocal));
+          createStudentItem(user);
+           // дефлотные позиции
+          const storageArr = JSON.parse(localStorage.getItem(key));
+          if (localStorage.getItem(key) === null || storageArr.length === 0) {
+            localStorage.setItem(key, JSON.stringify(defaultArrayLocal));
+          }
+
+          localStorage.setItem(key, JSON.stringify(arrayLocal));
+
             studentItemForm.inputName.value = '';
             studentItemForm.inputFaculty.value = '';
             studentItemForm.inputDateBirth.value = '';
