@@ -80,6 +80,7 @@
         inputFaculty.setAttribute('required', true);
         inputFaculty.setAttribute('minlength', 3);
         inputDateBirth.setAttribute('required', true);
+        inputDateBirth.setAttribute('max', `${New Date()}`);
         inputStartStudy.setAttribute('required', true);
 
         inputName.setAttribute('id', 'name')
