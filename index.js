@@ -88,9 +88,15 @@
         inputDateBirth.setAttribute('id', 'date-of-birth');
         inputStartStudy.setAttribute('id', 'start');
 
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        
         inputName.setAttribute('type', 'text')
         inputFaculty.setAttribute('type', 'text');
         inputDateBirth.setAttribute('type', 'date');
+        inputDateBirth.setAttribute('max', `${year-1}-${month+1}-${day}`);
         inputStartStudy.setAttribute('type', 'number');
         inputStartStudy.setAttribute('min', '2000');
         inputStartStudy.setAttribute('max', `${new Date().getFullYear()}`);
